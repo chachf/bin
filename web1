@@ -1,0 +1,8 @@
+#!/bin/bash
+#mon site web a l'uni
+
+#setterm -term linux -back blue -fore white -clear
+
+echo Conectando WATSI-WEB...
+
+ssh www.mat.ufmg.br

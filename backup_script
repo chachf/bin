@@ -1,0 +1,27 @@
+
+#!/bin/bash
+
+hora=$(date)
+local_dir="/home/sacha/TESTS/EssaisRsync/"
+remote_host="sacha@web.mat.ufmg.br"
+remote_dir="~/SAUVEGARDES/SAUVLATEX/EssaisRsync/"
+
+#Atencao: a opcao DELETE apaga tudo que nao ta no local_dir!!! Isso
+#pode ser meio ruim se eu quiser fazer a sincronizacao de varios 
+#computadores diferentes. 
+
+echo "
+--------------------------------------------
+Sincronizacao: $hora --- 
+**************************
+---> De $local_dir em $remote_host:
+" >> ~/trackingweb1.txt
+rsync -avu --rsh=ssh $local_dir $remote_host:$remote_dir >> ~/trackingweb1.txt 
+echo "
+**************************
+<--- De $remote_host em $local_dir :
+" >> ~/trackingweb1.txt
+rsync -avu --rsh=ssh $remote_host:$remote_dir $local_dir >> ~/trackingweb1.txt
+echo "--------------------------------------------
+" >> ~/trackingweb1.txt
+

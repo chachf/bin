@@ -1,0 +1,19 @@
+#!/bin/bash
+#vachement cool! ca me cherche tous les fichiers qui contiennent
+#des espaces, genre /home/latex/arquivo com espaco.tex, puis 
+#en extrait le "arquivo com espaco.tex", et le condense en 
+#enlevant les espaces
+
+#(Comme ca il fonctionne. Y'a juste un probleme au debut: si y'a
+#plusieurs sous repertoires qui ont des espaces ils merde un peu)
+# Pour transformer tous les noms de repertories qui contiennent des
+# espaces:
+
+for diretorio in `find . -type f | grep '[[:blank:]]' | tr " " "@"`
+do 
+   diretorio_velho=`echo $diretorio|tr "@" " "`
+   diretorio_novo=`echo $diretorio| tr "@" "_"`
+mv "$diretorio_velho"  $diretorio_novo
+done
+
+# (foi dica do Atos de usar tr em vez de sed)

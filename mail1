@@ -1,0 +1,5 @@
+#!/bin/bash
+#mon mail a l'uni
+echo "Conectando com WATSI..."
+
+ssh sacha@watsi.mat.ufmg.br

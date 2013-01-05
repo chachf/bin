@@ -1,0 +1,116 @@
+
+
+#!/bin/bash 
+
+# Un script qui me cree une liste aleatoire de N fichiers
+# .mp3 pris dans ma bibliotheque /Music
+
+# commande:
+# rndmusic [n] [repertoire]
+
+# enregistrer le nombre de morceaux que je veux extraire:
+n_desir=$1
+
+
+# s'il existe, effacer le fichier temporaire
+if [ -f temp_list.txt ]; then 
+ rm rnd_list.txt
+ fi
+
+#creer liste des fichiers possibles
+find $2 -type f -and \( -name '*.mp3' -or -name '*.flac' \) > temp_list.txt 
+
+# calculer le nombre de morceaux disponibles:
+nb=$( cat temp_list.txt | wc -l )
+
+#au cas ou y'aurait pas de fichiers musique dans le repertoire:
+if (( $nb == 0 )); then 
+echo "There are no .mp3 or .flac files in the specified directory. Try something else."
+exit
+fi
+
+#au cas ou le nombre de fichiers presents est trop petit:
+if (( $n_desir >= $nb )); then
+ echo "There aren't that many files. Choose a smaller number."
+exit
+fi
+
+
+# creer le nom du repertoire ou je stockerai les 
+#mp3 choisis aleatoirement
+today_dir=random_music_$(date +"%x" | tr / _)
+
+etat=0
+
+# debut de la boucle principale: 
+while [[ $etat = 0 ]]; do
+
+#reinitializer la liste aleatoire:
+if [ -f rnd_list.txt ]; then 
+ rm rnd_list.txt
+ fi
+touch rnd_list.txt
+
+# la boucle ou on choisit aleatoirement les morceaux dans la
+# liste des morceaux possibles
+# ------------------
+m=$nb
+for (( i=1; i <= $n_desir; i++ ))
+do
+#on choisit aleatoirement une ligne:
+let num=$[ ( $RANDOM % $m) +1 ]
+#on extrait la num-eme ligne: 
+sed -n ''$num'p' temp_list.txt >> rnd_list.txt
+#on enleve la ligne choisie du fichier et on
+#diminue la taille du fichier:
+sed -i ''$num'd' temp_list.txt
+m=$((m - 1))
+done
+
+#montrer la liste aleatoire:
+echo "$n_desir (out of $nb) songs taken randomly from $2 :
+"
+for J in $(cat rnd_list.txt) 
+do
+basename $J
+done
+
+#demander si on veut garder cette liste:
+echo -n " 
+
+Want to keep this list? (y=yes, r=reshuffle, q=quit) > "
+read answer 
+
+case $answer in
+
+  y)
+    # si oui, alors...
+    # on copie tous les morceaux de la liste aleatoire 
+    # dans le repertoire random_aujourdhui:
+    echo "Copying... please wait."
+     if [ ! -d $today_dir ]; then
+      mkdir $today_dir
+      fi
+     for I in $( cat rnd_list.txt )
+     do
+     cp $I $today_dir
+     done
+     echo "The songs were copied to $today_dir."
+     etat=1
+     ;;
+   r) # si non, alors on efface la liste aleatoire (et on
+   # recommence)
+    rm rnd_list.txt
+      touch rnd_list.txt
+     ;;
+   q) # si on dit quit alors o sort de la boucle
+   echo "Process aborted."
+     etat=1
+     ;;
+esac
+
+#fin de la boucle du "while":
+done
+
+rm rnd_list.txt
+rm temp_list.txt
