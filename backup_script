@@ -3,6 +3,8 @@
 # Date: 10 de Marco de 2013
 # Un script qui syncronise des repertoires distants.
 
+# un test pour voir si ca bouge
+
 # Attention: pour qu'il me synchronise ce qu'il y a dans le repertoire
 # rep1 avec ce qu'il y a dans le repertoire rep2, faut mettre des
 # barres a la fin: rsync ... rep1/ ... rep2/ (sinon il copie un des
