@@ -1,6 +1,8 @@
 # !/bin/bash
 
-# Para renomear sequencias de fotos.
+# Para renomear fotos contidas num diretorio, 
+# com o objetivo de usa-las como uma sequencia
+# dentro de openshot.
 # Tem que tar num diretorio cheio de fotos
 # que a GoPro tirou, tipo G02226543.JPG ... ate
 # G02228567.JPG
@@ -8,18 +10,11 @@
 # Chamando ./renamephotos , ele vai renomear todas 
 # assim: 0001.jpg ..... 1236.jpg
 
-# Ai depois, pode importar sequencia renomeada dentro
-# do Openshot.
-
 # Contar quantas fotos tem:
 
 N=$(ls *.JPG | wc -l)
 
-# Quantos digitos vai precisar pra escrever os nomes 
-# (e que eles tenham todos o mesmo tamanho):
-
-needed_digits=${#N}
-
+# Pro laco que a gente vai criar:
 n=1
 
 # Vamos percorrer todas as fotos que estao no diretorio,
